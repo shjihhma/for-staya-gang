@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>стая — дом родной ♡</title>
+    <style>
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #e07a1b !important;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 35px 25px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .slide-img {
+            max-width: 100%;
+            max-height: 280px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #f7e7da;
+            font-size: 19px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            white-space: pre-line;
+        }
+
+        .heart-icon {
+            font-size: 50px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .horizontal-btns {
+            flex-direction: row;
+            width: 100%;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #d4845d;
+            color: #123524;
+            border: none;
+            padding: 15px 25px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 132, 93, 0.2);
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #e39670;
+            transform: translateY(-2px);
+        }
+
+        .album-nav {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #f7e7da;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            width: auto;
+            flex: 1;
+        }
+        .album-nav:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .album-counter {
+            color: rgba(247, 231, 218, 0.6);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        #album-final-zone {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #btn-no {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #f7e7da;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: absolute;
+            transition: all 0.1s ease;
+            z-index: 10;
+        }
+
+        .screen, .album-item {
+            display: none;
+        }
+        .screen.active, .album-item.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        
+        <!-- ЭКРАН 1: Приветствие -->
+        <div id="screen-1" class="screen active">
+            <h2>ты еще не понимаешь, что происходит, да? добро пожаловать в нашу волшебную шкатулку воспоминаний. скорее листай дальше, чтобы узнать немного больше о нашей истории. или вспомнить, если ты был(а) ее частью.</h2>
+            <div class="btn-container">
+                <button onclick="nextScreen(2)">хочу...</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 2: Вопрос про путь -->
+        <div id="screen-2" class="screen">
+            <h2>пять лет. прошло целых пять лет с того момента, как это место открылось и начало свой путь. столько всего произошло, столько и грустных, и веселых историй. но мы здесь, чтобы вспомнить самое легендарное и забавное! ну что, готов(а) отправиться в это путешествие?</h2>
+            <div class="btn-container">
+                <button onclick="nextScreen(3)">готов!</button>
+                <button onclick="nextScreen(3)">готова!</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 3: Альбом воспоминаний (Всего 25 картинок) -->
+        <div id="screen-3" class="screen">
+            <div class="album-counter">воспоминание <span id="current-photo-num">1</span> из 59</div>
+            
+            <div id="album-container">
+                <!-- Картинки 1 и 2 с надписями -->
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/2.jpg" class="slide-img">
+                    <h2>начнем, наверное, с того, как казутора и баджи начали избивать друг друга в фб участников... (спойлер: потом они больно получили по шапке от ханмы)</h2>
+                </div>
+
+                <!-- 9 картинок БЕЗ надписей (номера с 3 по 11) -->
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/3.jpg" class="slide-img"></div>
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/4.jpg" class="slide-img"></div>
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/5.jpg" class="slide-img"></div>
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/6.jpg" class="slide-img"></div>
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/7.jpg" class="slide-img"></div>
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/8.jpg" class="slide-img"></div>
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/9.jpg" class="slide-img"></div>
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/10.jpg" class="slide-img"></div>
+                <div class="album-item"><img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/11.jpg" class="slide-img"></div>
+
+                <!-- Еще 9 картинок С надписями (номера с 12 по 20) -->
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/bobrromatalismantoman.jpg" class="slide-img">
+                    <h2>не знаю как, но у тосвы появился бобер Рома. да, эта белка определенно точно бобер. так сказали тосвята.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/cherepaha.jpg" class="slide-img">
+                    <h2>попросили как-то ханмазята сказку на ночь...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/mur%20avei.jpg" class="slide-img">
+                    <h2>попытка номер два...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/skazka.jpg" class="slide-img">
+                    <h2>воспитал. гордый отец.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/shpinat.jpg" class="slide-img">
+                    <h2>и еще. да, вальхалла точно семья шпинатов.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/%D1%85%D0%B5%D0%BB%D0%BB%D0%BE%D1%83%D0%B8%D0%BD.jpg" class="slide-img">
+                    <h2>суетологи-ханмазята устроили грандиозную пати в честь хеллоуина, в которой приняли участие все. это... это было очень круто. </h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/takashimem.jpg" class="slide-img">
+                    <h2>вспомним о легендарном командсыре... земля ему пухом. </h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/%D0%BE%D0%B4%D0%B0.jpg" class="slide-img">
+                    <h2>однажды йона написала целую оду для кп. это было очень трогательно!</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/%D1%81%D0%B5%D0%BB%D0%B2%D1%81%D1%82%D0%B0%D0%BB.jpg" class="slide-img">
+                    <h2>наша лучшая традиция бесконечно садиться перед киком из игрового полигона... и еще немного разных скринов</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/hanmacute.jpg" class="slide-img">
+                    <h2>скромность ему к лицу.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/cutefacehanma.jpg" class="slide-img">
+                    <h2>может скажем ему?...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/eshenereshil%20metu.jpg" class="slide-img">
+                    <h2>еще не решил</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/evil%20eva%20son.jpg" class="slide-img">
+                    <h2>брр... как вспомню...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/gin.jpg" class="slide-img">
+                    <h2>годы идут, ничего не меняется</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/ginclown.jpg" class="slide-img">
+                    <h2>годы идут, ничего не меняется х2</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/hakota.jpg" class="slide-img">
+                    <h2>легендарное рождение Хакоты</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/interestsweird.jpg" class="slide-img">
+                    <h2>очень необычно, зайка... чем не угодили фаланги пальцев левой руки?</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/shprot.jpg" class="slide-img">
+                    <h2>без комментариев.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/kakyulastalatormozom.jpg" class="slide-img">
+                    <h2>как ангелок Юля стала тормозом... ДА Я НЕ ЭТО ИМЕЛ В ВИДУ</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/lovelasi.jpg" class="slide-img">
+                    <h2>знакомьтесь, слева направо ловеласы тосвы</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/netsvetlie.jpg" class="slide-img">
+                    <h2>КЛЯНУСЬ У МЕНЯ ОТОБРАЖАЛСЯ КАК ТЕМНЫЙ</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/shrek.jpg" class="slide-img">
+                    <h2>шрекси шрекма. да кем я только ни был за пять лет... сейчас вообще потаскушкой стал.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/stopmurder.jpg" class="slide-img">
+                    <h2>ну так... по возможности...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/tapkihanmi.jpg" class="slide-img">
+                    <h2>самая точная визуализация Ханмы, когда он тапками гонит участников спать... были времена. щас все до трусов растащили.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/tomanatthemidnight.jpg" class="slide-img">
+                    <h2>время: 0:00. тосва:</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/tomanmidnight.jpg" class="slide-img">
+                    <h2>туда же...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/ugroza%20takashi.jpg" class="slide-img">
+                    <h2>угрожающий командсыр (пока его не разорвало на мосту...)))</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/tvaribluehanma.jpg" class="slide-img">
+                    <h2>твари</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/chifutryanka.jpg" class="slide-img">
+                    <h2>а теперь перенесемся чуть дальше, к новой эпохе стаи, когда мы отделились от мчленого пути и стали самостоятельными. так вот... совсем недавно был обнаружен новый вирус. только у каждого разные симптомы. говорят, есть еще баджитрянка и чифуютряпка))...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/chuvaaaaaak.jpg" class="slide-img">
+                    <h2>ЧУВАААААК</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/dance.jpg" class="slide-img">
+                    <h2>нейбольшой спойлер к тому, что вас ждет в конце...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/dance2.jpg" class="slide-img">
+                    <h2>и еще один...</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/eskortsachi.jpg" class="slide-img">
+                    <h2>и все же я думаю завышает)) спойлер: тьмоня всегда мафия</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/ochenneobichno.jpg" class="slide-img">
+                    <h2>очень необычно, зайка)</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/oleg.jpg" class="slide-img">
+                    <h2>как и всегда... на играх происходит необъяснимое. например, рождение олега ирминсуля... (листай дальше)</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/oleg2.jpg" class="slide-img">
+                    <h2>а вот и он</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/inuistar.jpg" class="slide-img">
+                    <h2>я значит виноград, а этот звезда? ну ваще.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/ririgolovores.jpg" class="slide-img">
+                    <h2>запоминаем это криминальное лицо. рири головорез.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/svisti.jpg" class="slide-img">
+                    <h2>давай рычи.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/svisti2.jpg" class="slide-img">
+                    <h2>давай рычи х2</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/tmkakunotazi.jpg" class="slide-img">
+                    <h2>безумные идеи безумного гения</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/trihvosta.jpg" class="slide-img">
+                    <h2>время идет, поколения сменяются, суетологи и клоунята все еще живут, но к ним присоединилось новое опг под названием "три кота три хвоста"</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/zarisovki.jpg" class="slide-img">
+                    <h2>ханма и его нелюбовь к написанию зарисовок... шучу. покупайте (нет) да.</h2>
+                </div>
+                <div class="album-item">
+                    <img src="https://github.com/shjihhma/images/blob/4f617fe077a6b6b9eb5837d7a25746a448d37a9d/vinogradhama.jpg" class="slide-img">
+                    <h2>навряд ли, конечно, это все заставило кого-то плакать, но если да, то:</h2>
+                </div>
+
+<div class="album-item">
+    <div class="video-wrapper">
+        <video src="https://github.com/shjihhma/images/blob/edd61deae757c5212477e332a642a9a0e98aa01c/polizei-compressed.mp4" 
+               class="slide-img" 
+               autoplay 
+               loop 
+               muted 
+               playsinline></video>
+        <!-- Кнопка включения звука -->
+        <button class="mute-btn" onclick="toggleMute(this)">🔇</button>
+    </div>
+    <h2>а это стая в ночь перед хеллоуином устроила дрожь земли:</h2>
+</div>
+
+<div class="album-item">
+    <div class="video-wrapper">
+        <video src="https://github.com/shjihhma/images/blob/edd61deae757c5212477e332a642a9a0e98aa01c/moveyobdy-compressed.mp4" 
+               class="slide-img" 
+               autoplay 
+               loop 
+               muted 
+               playsinline></video>
+        <!-- Кнопка включения звука -->
+        <button class="mute-btn" onclick="toggleMute(this)">🔇</button>
+    </div>
+
+<div class="album-item">
+    <div class="video-wrapper">
+        <video src="https://github.com/shjihhma/images/blob/edd61deae757c5212477e332a642a9a0e98aa01c/lavidaloca-compressed.mp4" 
+               class="slide-img" 
+               autoplay 
+               loop 
+               muted 
+               playsinline></video>
+        <!-- Кнопка включения звука -->
+        <button class="mute-btn" onclick="toggleMute(this)">🔇</button>
+    </div>
+
+            <!-- НАВИГАЦИЯ АЛЬБОМА -->
+            <div class="btn-container horizontal-btns" style="flex-direction: row; width: 100%; gap: 10px;">
+                <button class="album-nav" onclick="prevPhoto()">◀ назад</button>
+                <button class="album-nav" onclick="nextPhoto()">вперед ▶</button>
+            </div>
+
+            <!-- ЗОНА ПЕРЕХОДА (появляется только на 25-й картинке) -->
+            <div id="album-final-zone" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); position: relative;">
+                <h2 style="font-size: 16px; margin-bottom: 15px;">а еще йона и гин стали основателями клуба ночных клоунов... участники устраивали флешмобы "кусей" и кусали всех кп, а еще... создание подпольных фракций в тосве и вальхалле под наименованиями "суетологи" и "клоунята". а еще кп вечно гнали всех спать. а потом заботливые участники делали то же самое в ответ. а потом был переезд из млечного пути в непроглядную черную дыру, где светят только фары си... так, ладно, назовем проще: ребрендинг произошел. стали стаей. наш вульфгенг. была небольшая передышка, когда каждый из нас выполз из гнезда и учился летать самостоятельно. и все равно мы были вместе. и в горе, и в радости. и все это лишь крупицы. кстати, для пущей ностальгии можно просто открыть нашу дг и в поиске написать "слухи". чудесные были времена. ну что, идем дальше?</h2>
+                <div id="run-container" style="position: relative; height: 130px; width: 100%;">
+                    <button id="btn-run" style="position: absolute; width: auto; white-space: nowrap; left: 50%; transform: translateX(-50%); top: 10px; transition: all 0.15s ease;">дальше, отец!</button>
+                    <button onclick="nextScreen(4)" style="position: absolute; bottom: 10px; left: 0; width: 100%;">дальше, папочка...</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 4: Большое послание от Самого Красивого Отца -->
+        <div id="screen-4" class="screen">
+            <!-- Замени ССЫЛКУ_НА_КАРТИНКУ на реальную ссылку, когда она будет -->
+            <h2 style="font-size: 15px; text-align: justify; font-weight: normal;">в стае нужно не только улыбаться, но и быть собой, настоящим, и грустным, и злым, и уставшим. мы тебя любим. и вся стая любит. сколько бы времени ни прошло, пусть даже эта ролевая закроется навсегда, мы все равно найдем друг друга, и жизненные пути рано или поздно приведут тебя обратно. домой. к нам. мы будем вечно теми веселыми и молодыми, по крайней мере в наших общих ярких воспоминаниях. этот путь нельзя не назвать легендарным, правда? я всегда буду твоим отцом, а инуи всегда будет во всем виноват. я тебя крепко обнимаю. возвращайся к этому тесту всегда, когда покажется, что стало слишком темно. пусть это место будет твоим маяком и островом спокойствия. здесь я запечатал навсегда частичку нас. ну а теперь... тебе пора в фб, самое время отпинать меня, главное не по лицу, а то я слишком красивый. поднимем кулак в небо и скажем: стая — дом родной. ну все, жми кнопку, смотри позитивную картинку от спида и вперед к новым приключениям! и помни, после грозы всегда будет солнце.</h2>
+            <div class="btn-container">
+                <button onclick="nextScreen(5)">и я тебя люблю</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 5: Финал с прозрачным сердечком -->
+        <div id="screen-5" class="screen">
+            <div class="album-item"><img src="https://github.com/shjihhma/images/blob/11d3300c5c2de068d8b91082aa961216445495f2/woff.jpg" class="slide-img"></div>
+        </div>
+
+    </div>
+
+    <!-- СКРИПТЫ УПРАВЛЕНИЯ -->
+    <script>
+        let currentPhotoIndex = 0;
+        const albumItems = document.querySelectorAll('.album-item');
+        const totalPhotos = albumItems.length;
+
+        function nextScreen(screenNum) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`screen-${screenNum}`).classList.add('active');
+            
+            // Если перешли на экран с убегающей кнопкой
+            if (screenNum === 3) {
+                updateAlbum();
+            }
+            if (screenNum === 3 && currentPhotoIndex === totalPhotos - 1) {
+                initRunningButton();
+            }
+        }
+
+        function updateAlbum() {
+            albumItems.forEach((item, index) => {
+                if(index === currentPhotoIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            document.getElementById('current-photo-num').innerText = currentPhotoIndex + 1;
+
+            // Показываем кнопки интерактива только на самом последнем слайде
+            if (currentPhotoIndex === totalPhotos - 1) {
+                document.getElementById('album-final-zone').style.display = 'block';
+                initRunningButton();
+            } else {
+                document.getElementById('album-final-zone').style.display = 'none';
+            }
+        }
+
+        function nextPhoto() {
+            if (currentPhotoIndex < totalPhotos - 1) {
+                currentPhotoIndex++;
+                updateAlbum();
+            }
+        }
+
+        function prevPhoto() {
+            if (currentPhotoIndex > 0) {
+                currentPhotoIndex--;
+                updateAlbum();
+            }
+        }
+
+        // Логика убегающей кнопки (работает на ПК и смартфонах)
+function initRunningButton() {
+    const runBtn = document.getElementById('btn-run');
+    const container = document.getElementById('run-container');
+
+    if (!runBtn || !container) return;
+
+    // Не добавляем обработчики повторно,
+    // если пользователь снова возвращается на 25-й слайд
+    if (runBtn.dataset.initialized === 'true') return;
+    runBtn.dataset.initialized = 'true';
+
+    function runAway() {
+        const containerWidth = Math.max(
+            10,
+            container.clientWidth - runBtn.offsetWidth - 5
+        );
+
+        const containerHeight = Math.max(
+            10,
+            container.clientHeight - runBtn.offsetHeight - 5
+        );
+
+        // Убираем центрирование через transform,
+        // чтобы кнопка не улетала за границы
+        runBtn.style.transform = 'none';
+
+        // Случайное положение внутри блока
+        const randomX = Math.floor(Math.random() * containerWidth) + 5;
+        const randomY = Math.floor(Math.random() * containerHeight) + 5;
+
+        runBtn.style.left = randomX + 'px';
+        runBtn.style.top = randomY + 'px';
+    }
+
+    // ПК — убегает при наведении мыши
+    runBtn.addEventListener('mouseover', runAway);
+
+    // Телефон — убегает при попытке нажать
+    runBtn.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        runAway();
+    }, { passive: false });
+}
+    </script>
+</body>
+</html>
+
